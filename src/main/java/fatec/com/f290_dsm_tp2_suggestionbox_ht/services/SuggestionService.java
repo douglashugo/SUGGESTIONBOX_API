@@ -1,66 +1,70 @@
 package fatec.com.f290_dsm_tp2_suggestionbox_ht.services;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Service;
 
 import fatec.com.f290_dsm_tp2_suggestionbox_ht.config.exceptions.ObjectNotFoundException;
-import fatec.com.f290_dsm_tp2_suggestionbox_ht.model.entities.Category;
 import fatec.com.f290_dsm_tp2_suggestionbox_ht.model.entities.Suggestion;
 import fatec.com.f290_dsm_tp2_suggestionbox_ht.repositories.SuggestionRepository;
-import fatec.com.f290_dsm_tp2_suggestionbox_ht.repositories.CategoryRepository;
-
 
 @Service
 public class SuggestionService {
 
-    @Autowired
-    private SuggestionRepository repository;
+    private SuggestionRepository suggestionRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-     public void seedCategories() {
-        Category sugestao = categoryRepository.save(new Category("Sugestão"));
-        Category critica = categoryRepository.save(new Category("Crítica"));
-        Category elogio = categoryRepository.save(new Category("Elogio"));
-        Category comentario = categoryRepository.save(new Category("Comentário"));
-
-        // Criação do registro com base em uma categoria
-        Suggestion suggestion = new Suggestion();
-        suggestion.setTitle("Título do registro base");
-        suggestion.setDescription("Descrição do registro base");
-        suggestion.setCategory(sugestao); // Defina a categoria desejada aqui
-        repository.save(suggestion);
+    public SuggestionService(SuggestionRepository suggestionRepository) {
+        this.suggestionRepository = suggestionRepository;
     }
 
-    // Criar validação exceção para ExceptionHandler
-    public Suggestion create(Suggestion suggestion) {
-        if (suggestion == null) {
-            throw new ObjectNotFoundException("Sugestão não pode ser nula.");
+    public List<Suggestion> buscarTodos() {
+        return suggestionRepository.findAll();
+    }
+
+    public Suggestion buscarPorId(Integer pId) {
+        Optional<Suggestion> optional = suggestionRepository.findById(pId);
+        if (optional.isEmpty()) {
+            throw new ObjectNotFoundException("Categoria não localizada. ID: " + pId);
         }
-        return repository.save(suggestion);
-
+        return optional.get();
     }
 
-    // Criar método que retorne todas as sugestões do banco de dados.
-    public List<Suggestion> getAll() {
-        return repository.findAll();
-    }
+    public Suggestion atualizar(Integer id, Suggestion pSuggestion) {
+        Optional<Suggestion> optSuggestion = suggestionRepository.findById(id);
 
-    // Criar método que remova uma sugestão do banco de dados.
-    public void delete(Integer id) {
-        if (!repository.existsById(id)) {
-            throw new ObjectNotFoundException("Sugestão não encontrada com o ID: " + id);
+        if (optSuggestion.isPresent()) {
+            Suggestion suggestion = optSuggestion.get();
+            suggestion.setDescription(pSuggestion.getDescription());
+            return suggestionRepository.save(suggestion);
         }
-        repository.deleteById(id);
+        throw new ObjectNotFoundException("Categoria não localizada. ID: " + id);
     }
 
-    // Criar método que retorne uma sugestão com base num id.
-    public Suggestion getById(Integer id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Sugestão não encontrada com o ID: " + id));
+    public void remover(Integer id) throws Exception {
+        //try {
+            suggestionRepository.deleteById(id);
+        //} catch (Exception e) {
+        //    throw new ObjectNotFoundException("Categoria não localizada. ID: " + id);
+        //}
     }
+
+    public Suggestion create(@Valid Suggestion suggestion) {
+        return suggestionRepository.save(suggestion);
+    }
+
+    public Suggestion salvar(Suggestion suggestion) {
+    try {
+        // Tente salvar a sugestão no repositório
+        return suggestionRepository.save(suggestion);
+    } catch (Exception e) {
+        throw new IllegalArgumentException("Argumento inválido: " + e.getMessage());
+    }
+}
+
+
 
 }
+

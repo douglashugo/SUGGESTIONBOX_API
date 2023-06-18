@@ -1,5 +1,6 @@
 package fatec.com.f290_dsm_tp2_suggestionbox_ht.api.v1.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -36,12 +37,6 @@ public class CategoryResource {
         return ResponseEntity.created(null).build();
     }
 
-    @GetMapping("/all")
-    public List<Category> getAllCategories(){
-        List<Category> categories = service.getAllCategories();
-        return categories;
-    }
-
     @PutMapping("/{id}")
     public Category update(@PathVariable("id")Integer pId, @RequestBody Category category){
         return service.atualizar(pId, category);
@@ -52,13 +47,13 @@ public class CategoryResource {
         return service.buscarPorId(pId);
     }
 
-    @GetMapping("/{all}")
+    @GetMapping("/all")
     public List<Category>getAll(){
-        return service.getAllCategories();
+        return service.buscarTodos();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id")Integer pId){
+    public void delete(@PathVariable("id")Integer pId) throws Exception {
         service.remover(pId);
     }
 

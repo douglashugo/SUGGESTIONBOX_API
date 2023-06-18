@@ -16,7 +16,15 @@ public class ExceptionHandlerConfig {
         var error = new ApiError(System.currentTimeMillis(),
         404, exception.getMessage(), 
         "Recurso não localizado", request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<ApiError> illegalArgumentException(IllegalArgumentException exception, HttpServletRequest request) {
+        var error = new ApiError(System.currentTimeMillis(),
+                400, exception.getMessage(),
+                "Argumento inválido", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
     
 }

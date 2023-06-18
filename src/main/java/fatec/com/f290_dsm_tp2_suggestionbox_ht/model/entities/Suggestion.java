@@ -36,6 +36,4 @@ public class Suggestion {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public void setTitle(String string) {
-    }
 }

@@ -19,8 +19,6 @@ import lombok.Data;
 @Entity(name = "categories")
 public class Category {
 
-    public Category(String string) {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

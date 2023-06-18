@@ -1,4 +1,4 @@
-package fatec.com.f290_dsm_tp2_suggestionbox_ht;
+ package fatec.com.f290_dsm_tp2_suggestionbox_ht;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
