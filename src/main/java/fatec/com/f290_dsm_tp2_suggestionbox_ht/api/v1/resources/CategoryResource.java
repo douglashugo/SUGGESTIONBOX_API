@@ -57,4 +57,16 @@ public class CategoryResource {
         service.remover(pId);
     }
 
+    @PostMapping("/new")
+    public ResponseEntity<Void> save(@RequestBody Category category) {
+        category.setId(null);
+        service.salvar(category);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/all")
+    public List<Category> getAllCategories(){
+        List<Category> categories = CategoryService.getAllCategories();
+        return categories;
+    }
 }
