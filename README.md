@@ -1,6 +1,8 @@
 # SuggestionBox_API
 Princípios de uma API de forma 100% prática utilizando Spring Boot.
 
+As atualizações da Suggestion foram executadas por mim, Valdelaine e Gabriel Pedro
+
 Challenge
 1. Remover a opção de criar as entidades automaticamente do aplication-test.properties e substituir por none.
 2. Criar um script que crie a entidade category e inclua 3 categorias.
